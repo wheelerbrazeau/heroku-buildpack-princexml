@@ -1,0 +1,12 @@
+#!/bin/bash
+
+PRINCE_VERSION="10r3"
+echo "-----> Installing PrinceXML $PRINCE_VERSION"
+[ -d .downloads ] || mkdir .downloads
+(cd .downloads; [ -d "prince-$PRINCE_VERSION-linux-amd64-static" ] ||
+  curl -s http://www.princexml.com/download/prince-$PRINCE_VERSION-linux-generic-x86_64.tar.gz | tar xzf -)
+echo $1 | ./.downloads/prince-$PRINCE_VERSION-linux-generic-x86_64/install.sh
+cat >$1/bin/prince <<EOF
+#!/bin/sh
+exec /app/lib/prince/bin/prince --prefix="/app/lib/prince" "\$@"
+EOF
